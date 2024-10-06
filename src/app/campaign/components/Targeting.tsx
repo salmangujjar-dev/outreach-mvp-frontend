@@ -1,43 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import { Select, SelectItem, Button } from "@nextui-org/react";
 import { toast } from "react-toastify";
 
-import { LOCATIONS, PERSON_TITLES } from "../constants";
+import { COMPANY_SIZE, INDUSTRIES, LOCATIONS } from "../constants";
 import { TTargetingFilters } from "../types";
+import Loader from "@components/Loader";
 
 type TTargeting = {
+  campaignId: string;
   nextStep: () => void;
 };
 
-const Targeting = ({}: TTargeting) => {
-  const apiUrl = process.env.APOLLO_SEARCH_API;
-  const apiKey = process.env.APOLLO_API_KEY;
+const Targeting = ({ campaignId, nextStep }: TTargeting) => {
+  const [isSubmiting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (values: TTargetingFilters) => {
     console.log(values);
-
-    if (!apiUrl || !apiKey) {
-      toast.error("Apollo API configuration is missing");
-      return;
-    }
-
+    setIsSubmitting(true);
     try {
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-cache",
-          "X-Api-Key": `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          api_key: apiKey,
-          person_locations: values?.location,
-          person_titles: values?.personTitle,
-          page: 1,
-          per_page: 10,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}campaign/${campaignId}/search-leads`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -45,10 +36,13 @@ const Targeting = ({}: TTargeting) => {
 
       const data = await response.json();
       toast.success("Successfully fetched Data!");
-      console.log("Apollo API response:", data);
+      console.log("API response:", data);
+      nextStep();
     } catch (error: any) {
-      console.error("Error fetching data from Apollo:", error);
-      toast.error(error?.message || "Error fetching data from Apollo");
+      console.error("Error fetching data!", error);
+      toast.error(error?.message || "Error fetching data!");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -56,8 +50,9 @@ const Targeting = ({}: TTargeting) => {
     <div className="w-full max-w-md mx-auto">
       <Formik
         initialValues={{
-          location: [],
-          personTitle: [],
+          locations: [],
+          industries: [],
+          companySizes: [],
         }}
         onSubmit={handleSubmit}
       >
@@ -65,45 +60,79 @@ const Targeting = ({}: TTargeting) => {
           <Form className="space-y-4 dark flex flex-col items-center">
             <Select
               label="Location"
-              placeholder="Select Location"
+              placeholder="Select Locations"
               selectionMode="multiple"
-              value={values.location}
+              value={values.locations}
               onSelectionChange={(values) => {
                 const selectedValues = Array.from(values);
-                setFieldValue("location", selectedValues);
+                setFieldValue("locations", selectedValues);
               }}
               isRequired
             >
               {LOCATIONS.map((item) => (
-                <SelectItem key={item} value={item}>
+                <SelectItem
+                  key={item}
+                  value={item}
+                  className="capitalize"
+                  classNames={{ title: "font-bold" }}
+                >
                   {item}
                 </SelectItem>
               ))}
             </Select>
 
             <Select
-              label="Person Title"
-              placeholder="Select a Title"
+              label="Industry"
+              placeholder="Select Industries"
               selectionMode="multiple"
-              value={values.personTitle}
+              value={values.industries}
               onSelectionChange={(values) => {
                 const selectedValues = Array.from(values);
-                setFieldValue("personTitle", selectedValues);
+                setFieldValue("industries", selectedValues);
               }}
               isRequired
             >
-              {PERSON_TITLES.map((item) => (
-                <SelectItem key={item} value={item}>
+              {INDUSTRIES.map((item: string) => (
+                <SelectItem
+                  key={item}
+                  value={item}
+                  className="capitalize"
+                  classNames={{ title: "font-bold" }}
+                >
                   {item}
                 </SelectItem>
               ))}
             </Select>
-            <span>
-              Results are limited to 10 due to the free Apollo Search API
-            </span>
-            <Button type="submit" color="primary">
-              Apply Filters
-            </Button>
+
+            <Select
+              label="Company Size"
+              placeholder="Select Company Sizes"
+              selectionMode="multiple"
+              value={values.companySizes}
+              onSelectionChange={(values) => {
+                const selectedValues = Array.from(values);
+                setFieldValue("companySizes", selectedValues);
+              }}
+              isRequired
+            >
+              {Object.values(COMPANY_SIZE).map((size) => (
+                <SelectItem
+                  key={size}
+                  value={size}
+                  classNames={{ title: "font-bold" }}
+                >
+                  {size}
+                </SelectItem>
+              ))}
+            </Select>
+            <span>Results are limited to 10 due to the free Search API</span>
+            {isSubmiting ? (
+              <Loader />
+            ) : (
+              <Button type="submit" color="primary">
+                Apply Filters
+              </Button>
+            )}
           </Form>
         )}
       </Formik>

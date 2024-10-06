@@ -5,7 +5,7 @@ export type TICPQuestions = {
 };
 
 export type TPersona = {
-  id: string;
+  _id: string;
   name: string;
   icpQuestions: TICPQuestions;
 };

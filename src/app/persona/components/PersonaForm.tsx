@@ -5,13 +5,11 @@ import {
   Modal,
   ModalBody,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   Textarea,
   useDisclosure,
 } from "@nextui-org/react";
 import { Form, Formik } from "formik";
-import { toast } from "react-toastify";
 import * as Yup from "yup";
 
 import { TPersona } from "../types";
@@ -20,7 +18,7 @@ type Props = {
   children: ReactNode;
   isEditable?: boolean;
   data?: TPersona;
-  handleSubmit: (values: TPersona) => void;
+  handleSubmit: (values: TPersona) => Promise<boolean>;
 };
 
 const validationSchema = Yup.object().shape({
@@ -54,7 +52,7 @@ const PersonaForm = ({
                 <Formik
                   initialValues={
                     data || {
-                      id: "",
+                      _id: "",
                       name: "",
                       icpQuestions: {
                         usp: "",
@@ -66,9 +64,10 @@ const PersonaForm = ({
                   validationSchema={validationSchema}
                   onSubmit={async (values: TPersona) => {
                     console.log("submit", { values });
-                    await handleSubmit(values);
-                    toast.success("Persona updated");
-                    onClose();
+                    const res = await handleSubmit(values);
+                    if (res) {
+                      onClose();
+                    }
                   }}
                   enableReinitialize
                 >
@@ -79,7 +78,7 @@ const PersonaForm = ({
                           type="text"
                           name="id"
                           label="ID"
-                          value={values?.id}
+                          value={values?._id}
                           disabled
                         />
                       )}

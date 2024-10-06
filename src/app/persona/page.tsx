@@ -1,19 +1,22 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { Button } from "@nextui-org/react";
 
 import GoBack from "@components/GoBack";
 import Table from "@components/Table";
+import Loader from "@components/Loader";
 
-import { PERSONA_DATA } from "@utils/data";
-import { COLUMN } from "@utils/types";
 import PersonaForm from "./components/PersonaForm";
-import { Button } from "@nextui-org/react";
 import { TPersona } from "./types";
+
+import usePersona from "../hooks/usePersona";
+
+import { COLUMN } from "@utils/types";
 
 const columns: COLUMN[] = [
   {
-    key: "id",
+    key: "_id",
     title: "ID",
   },
   {
@@ -23,6 +26,13 @@ const columns: COLUMN[] = [
 ];
 
 const Persona = () => {
+  const {
+    data: personaData,
+    isLoading,
+    createPersona,
+    editPersona,
+    deletePersona,
+  } = usePersona();
   const [data, setData] = useState<TPersona[]>([]);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,40 +42,32 @@ const Persona = () => {
     setCurrentPage(pageNumber);
   };
 
-  const handleCreate = (values: TPersona) => {
-    console.log(`Create Name: ${values.name}`);
-  };
-
-  const handleEdit = (values: TPersona) => {
-    console.log(`Edit Id: ${values.id}`);
-  };
-
-  const handleDelete = (id: string) => {
-    console.log(`Delete Id: ${id}`);
-  };
-
   useEffect(() => {
-    setData(PERSONA_DATA);
-  }, []);
+    setData(personaData);
+  }, [personaData]);
 
   return (
     <div className="relative min-h-screen flex flex-col justify-center items-center gap-y-4 px-10">
       <GoBack />
-      <PersonaForm handleSubmit={handleCreate}>
-        <Button color="primary" className="">
-          Create Persona
-        </Button>
-      </PersonaForm>
-      <Table
-        columns={columns}
-        data={data}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        FormComponent={PersonaForm}
-        handlePageChange={handlePageChange}
-        handleEdit={handleEdit}
-        handleDelete={handleDelete}
-      />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <PersonaForm handleSubmit={createPersona}>
+            <Button color="primary">Create Persona</Button>
+          </PersonaForm>
+          <Table
+            columns={columns}
+            data={data}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            FormComponent={PersonaForm}
+            handlePageChange={handlePageChange}
+            handleEdit={editPersona}
+            handleDelete={deletePersona}
+          />
+        </>
+      )}
     </div>
   );
 };

@@ -12,7 +12,9 @@ type Props = {
   data: TPersona[] | TGetCampaign[];
   currentPage: number;
   totalPages: number;
-  FormComponent: any;
+  isRowClickable?: boolean;
+  href?: string;
+  FormComponent?: any;
   handlePageChange: (pageNumber: number) => void;
   handleEdit?: (values: TPersona) => void;
   handleDelete: (id: string) => void;
@@ -23,6 +25,8 @@ const Table: React.FC<Props> = ({
   data,
   currentPage = 1,
   totalPages = 1,
+  isRowClickable = false,
+  href = "/",
   FormComponent,
   handlePageChange,
   handleEdit,
@@ -53,7 +57,13 @@ const Table: React.FC<Props> = ({
         </thead>
         <tbody className="bg-white divide-y divide-gray-200 ">
           {data.map((row, rowIndex) => (
-            <tr key={rowIndex} className="align-middle">
+            <tr
+              key={rowIndex}
+              className="align-middle cursor-pointer"
+              onClick={() =>
+                isRowClickable && (window.location.href = `${href}/${row._id}`)
+              }
+            >
               {columns.map((cell, cellIndex) => (
                 <td
                   key={cellIndex}
@@ -76,7 +86,12 @@ const Table: React.FC<Props> = ({
                   </FormComponent>
                 )}
 
-                <button onClick={() => handleDelete?.(row?.id)}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete?.(row?._id);
+                  }}
+                >
                   <Trash className="text-red-500 focus:outline-none" />
                 </button>
               </td>

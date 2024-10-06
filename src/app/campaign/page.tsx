@@ -5,21 +5,27 @@ import { Button } from "@nextui-org/react";
 
 import GoBack from "@components/GoBack";
 import Table from "@components/Table";
+import Loader from "@components/Loader";
 
 import CampaignForm from "./components/CampaignForm";
 
-import { CAMPAIGN_DATA } from "@utils/data";
+import useCampaign from "../hooks/useCampaign";
+
 import { COLUMN } from "@utils/types";
-import { TCreateCampaign, TGetCampaign } from "./types";
+import { TGetCampaign } from "./types";
 
 const columns: COLUMN[] = [
   {
-    key: "id",
+    key: "_id",
     title: "ID",
   },
   {
     key: "name",
     title: "Name",
+  },
+  {
+    key: "status",
+    title: "Status",
   },
   {
     key: "totalLeads",
@@ -41,6 +47,12 @@ const columns: COLUMN[] = [
 
 const Campaign = () => {
   const [data, setData] = useState<TGetCampaign[]>([]);
+  const {
+    data: campaignData,
+    isLoading,
+    createCampaign,
+    deleteCampaign,
+  } = useCampaign();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -49,35 +61,34 @@ const Campaign = () => {
     setCurrentPage(pageNumber);
   };
 
-  const handleCreate = (values: TCreateCampaign) => {
-    console.log(`Create Name: ${values.name}`);
-  };
-
-  const handleDelete = (id: string) => {
-    console.log(`Delete Id: ${id}`);
-  };
-
   useEffect(() => {
-    setData(CAMPAIGN_DATA);
-  }, []);
+    setData(campaignData);
+  }, [campaignData]);
 
   return (
     <div className="relative min-h-screen flex flex-col justify-center items-center gap-y-4 px-10">
       <GoBack />
-      <CampaignForm handleSubmit={handleCreate}>
-        <Button color="primary" className="">
-          Create Campaign
-        </Button>
-      </CampaignForm>
-      <Table
-        columns={columns}
-        data={data}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        FormComponent={CampaignForm}
-        handlePageChange={handlePageChange}
-        handleDelete={handleDelete}
-      />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <CampaignForm handleSubmit={createCampaign}>
+            <Button color="primary" className="">
+              Create Campaign
+            </Button>
+          </CampaignForm>
+          <Table
+            columns={columns}
+            data={data}
+            isRowClickable={true}
+            href={"/campaign"}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+            handleDelete={deleteCampaign}
+          />
+        </>
+      )}
     </div>
   );
 };

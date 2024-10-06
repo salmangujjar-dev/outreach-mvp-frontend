@@ -2,9 +2,11 @@
 
 import React from "react";
 
+import Loader from "@components/Loader";
+
 import Targeting from "../components/Targeting";
-import Enrichment from "../components/Enrichment";
-import EmailCreation from "../components/EmailCreation";
+import Enrichment from "../components/Leads";
+import Emails from "../components/Emails";
 
 import { CampaignProvider, useCampaignProvider } from "../provider";
 import { CAMPAIGN_STEP } from "../constants";
@@ -12,10 +14,11 @@ import { CAMPAIGN_STEP } from "../constants";
 import { clsxm } from "@utils/clsxm";
 
 const CampaignContent = () => {
-  const { currentStep, nextStep } = useCampaignProvider();
+  const { campaign, currentStep, nextStep } = useCampaignProvider();
   return (
-    <div className="flex flex-col gap-y-10 items-center">
-      <div className="flex gap-x-2 mt-10">
+    <div className="flex flex-col gap-y-10 items-center mt-10">
+      <h1 className="text-4xl">CAMPAIGN NAME: {campaign?.name}</h1>{" "}
+      <div className="flex gap-x-2">
         {Object.entries(CAMPAIGN_STEP).map(([_, value], index) => (
           <div
             key={index}
@@ -30,13 +33,15 @@ const CampaignContent = () => {
       {(() => {
         switch (currentStep) {
           case CAMPAIGN_STEP.TARGET:
-            return <Targeting nextStep={nextStep} />;
-          case CAMPAIGN_STEP.ENRICHMENT:
+            return (
+              <Targeting campaignId={campaign?._id!} nextStep={nextStep} />
+            );
+          case CAMPAIGN_STEP.LEADS:
             return <Enrichment />;
-          case CAMPAIGN_STEP.EMAIL_CREATION:
-            return <EmailCreation />;
+          case CAMPAIGN_STEP.EMAILS:
+            return <Emails />;
           default:
-            return <div>Nothing to Show here</div>;
+            return <Loader />;
         }
       })()}
     </div>
