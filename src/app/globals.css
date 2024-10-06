@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;1,100;1,200&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,19 +7,40 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --scrollbar-thumb: #888888;
+  --scrollbar-track: #f1f1f1;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --scrollbar-thumb: #555555;
+    --scrollbar-track: #333333;
   }
 }
 
 body {
-  color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Montserrat', sans-serif; 
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground);
 }
 
 @layer utilities {
