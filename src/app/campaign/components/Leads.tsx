@@ -13,6 +13,28 @@ const Enrichment = () => {
 
   const [leads, setLeads] = useState<TCampaignLeads[]>([]);
 
+  const initiateEmailGeneration = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}campaign/${campaign?._id}/generate-emails`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to generate emails");
+      }
+      await response.json();
+      toast.success("Emails Generation Started.");
+    } catch (error) {
+      console.error("Error generating emails:", error);
+      toast.error("Failed to generate emails.");
+    }
+  };
+
   useEffect(() => {
     (async () => {
       if (campaign?._id) {
@@ -73,6 +95,7 @@ const Enrichment = () => {
         className="w-full"
         onClick={async () => {
           await updateStepper(campaign?._id!, CAMPAIGN_STEP.EMAILS);
+          await initiateEmailGeneration();
           toast.success(
             "Leads Enrichment Started. This is will take a few minutes."
           );
