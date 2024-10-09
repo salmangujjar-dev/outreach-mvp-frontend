@@ -73,7 +73,7 @@ const Emails = () => {
   }, [campaign?._id]);
 
   return (
-    <div>
+    <div className="flex flex-col gap-y-4">
       <div className="grid grid-cols-4 gap-4 justify-items-center">
         {leadsWithEmails.map(({ lead, email }, index) => (
           <div

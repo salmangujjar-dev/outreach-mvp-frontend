@@ -1,9 +1,10 @@
+import { CAMPAIGN_STATUS } from "../app/campaign/constants";
 import { TGetCampaign } from "../app/campaign/types";
 import { TPersona } from "../app/persona/types";
 
 export const PERSONA_DATA: TPersona[] = [
   {
-    id: "1",
+    _id: "1",
     name: "Joe Doe",
     icpQuestions: {
       usp: "Streamlined solutions for small businesses",
@@ -12,16 +13,16 @@ export const PERSONA_DATA: TPersona[] = [
     },
   },
   {
-    id: "2",
+    _id: "2",
     name: "Jane Smith",
     icpQuestions: {
-      usp: "Tailored healthcare solutions for mid-size companies",
+      usp: "Tailored healthcare solutions for m_id-size companies",
       industry: "Healthcare",
       customerSupport: "Dedicated support team with HIPAA compliance expertise",
     },
   },
   {
-    id: "3",
+    _id: "3",
     name: "Bob Johnson",
     icpQuestions: {
       usp: "Comprehensive risk management tools for large corporations",
@@ -30,7 +31,7 @@ export const PERSONA_DATA: TPersona[] = [
     },
   },
   {
-    id: "4",
+    _id: "4",
     name: "Alice Brown",
     icpQuestions: {
       usp: "Agile e-commerce solutions for startups",
@@ -40,7 +41,7 @@ export const PERSONA_DATA: TPersona[] = [
     },
   },
   {
-    id: "5",
+    _id: "5",
     name: "Charlie Davis",
     icpQuestions: {
       usp: "Efficient digital services for government agencies",
@@ -50,7 +51,7 @@ export const PERSONA_DATA: TPersona[] = [
     },
   },
   {
-    id: "6",
+    _id: "6",
     name: "Eva Wilson",
     icpQuestions: {
       usp: "Innovative fundraising platforms for non-profit organizations",
@@ -59,7 +60,7 @@ export const PERSONA_DATA: TPersona[] = [
     },
   },
   {
-    id: "7",
+    _id: "7",
     name: "Frank Miller",
     icpQuestions: {
       usp: "Creative management tools for freelancers",
@@ -69,7 +70,7 @@ export const PERSONA_DATA: TPersona[] = [
     },
   },
   {
-    id: "8",
+    _id: "8",
     name: "Grace Lee",
     icpQuestions: {
       usp: "Integrated online and offline solutions for small retailers",
@@ -79,7 +80,7 @@ export const PERSONA_DATA: TPersona[] = [
     },
   },
   {
-    id: "9",
+    _id: "9",
     name: "Henry Taylor",
     icpQuestions: {
       usp: "Cutting-edge AI and ML solutions for tech startups",
@@ -89,7 +90,7 @@ export const PERSONA_DATA: TPersona[] = [
     },
   },
   {
-    id: "10",
+    _id: "10",
     name: "Ivy Clark",
     icpQuestions: {
       usp: "Advanced supply chain optimization for manufacturing companies",
@@ -102,83 +103,93 @@ export const PERSONA_DATA: TPersona[] = [
 
 export const CAMPAIGN_DATA: TGetCampaign[] = [
   {
-    id: "1",
+    _id: "1",
     name: "Tech Innovators Outreach",
     totalLeads: 500,
     totalEmails: 1500,
     totalSent: 1200,
     totalPending: 300,
+    status: CAMPAIGN_STATUS.ACTIVE,
   },
   {
-    id: "2",
+    _id: "2",
     name: "Healthcare Solutions Campaign",
     totalLeads: 300,
     totalEmails: 900,
     totalSent: 750,
     totalPending: 150,
+    status: CAMPAIGN_STATUS.ACTIVE,
   },
   {
-    id: "3",
+    _id: "3",
     name: "Financial Services Expansion",
     totalLeads: 400,
     totalEmails: 1200,
     totalSent: 1000,
     totalPending: 200,
+    status: CAMPAIGN_STATUS.ACTIVE,
   },
   {
-    id: "4",
+    _id: "4",
     name: "E-commerce Growth Initiative",
     totalLeads: 600,
     totalEmails: 1800,
     totalSent: 1500,
     totalPending: 300,
+    status: CAMPAIGN_STATUS.ACTIVE,
   },
   {
-    id: "5",
+    _id: "5",
     name: "Education Sector Engagement",
     totalLeads: 250,
     totalEmails: 750,
     totalSent: 600,
     totalPending: 150,
+    status: CAMPAIGN_STATUS.ACTIVE,
   },
   {
-    id: "6",
+    _id: "6",
     name: "Non-Profit Fundraising Drive",
     totalLeads: 200,
     totalEmails: 600,
     totalSent: 500,
     totalPending: 100,
+    status: CAMPAIGN_STATUS.ACTIVE,
   },
   {
-    id: "7",
+    _id: "7",
     name: "Freelancer Tools Promotion",
     totalLeads: 350,
     totalEmails: 1050,
     totalSent: 900,
     totalPending: 150,
+    status: CAMPAIGN_STATUS.ACTIVE,
   },
   {
-    id: "8",
+    _id: "8",
     name: "Retail Solutions Showcase",
     totalLeads: 450,
     totalEmails: 1350,
     totalSent: 1100,
     totalPending: 250,
+    status: CAMPAIGN_STATUS.ACTIVE,
   },
   {
-    id: "9",
+    _id: "9",
     name: "AI/ML Startups Connect",
     totalLeads: 300,
     totalEmails: 900,
     totalSent: 750,
     totalPending: 150,
+    status: CAMPAIGN_STATUS.ACTIVE,
   },
   {
-    id: "10",
+    _id: "10",
     name: "Manufacturing Optimization Push",
     totalLeads: 400,
     totalEmails: 1200,
     totalSent: 1000,
     totalPending: 200,
+    status: CAMPAIGN_STATUS.ACTIVE,
   },
 ];

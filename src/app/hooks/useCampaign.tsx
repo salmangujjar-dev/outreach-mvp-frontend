@@ -31,6 +31,7 @@ const useCampaign = () => {
   }, []);
 
   const createCampaign = async (values: TCreateCampaign) => {
+    setIsLoading(true);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}campaign`,
@@ -59,6 +60,8 @@ const useCampaign = () => {
       toast.error("Error creating campaign");
 
       return null;
+    } finally {
+      setIsLoading(false);
     }
   };
 

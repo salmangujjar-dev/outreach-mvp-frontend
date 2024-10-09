@@ -1,3 +1,4 @@
+import { TLinkedInCookies } from "@utils/types";
 import {
   CAMPAIGN_STATUS,
   CAMPAIGN_STEP,
@@ -81,6 +82,7 @@ export type TCreateCampaign = {
   sendLimit: number;
   startDate: string;
   stepper: CAMPAIGN_STEP;
+  linkedin?: TLinkedInCookies;
 };
 
 export type TCampaignContext = {
